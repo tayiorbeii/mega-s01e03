@@ -12,7 +12,7 @@ For a day-first booking-v3 tenant, follow the printed MM/DD/YYYY hint for an amb
 
 ## Count and distinction
 
-Deduplicate by report ID, filter mergedInto === 4471, and call groupByCause with tenantOf. The hint group contains 15 reports tagged parser and 18 tagged hint. Counting intake tags would incorrectly give 41 instead of 33. Together with #1's 379 assignments this accounts for all 412 unique reports without double counting.
+Deduplicate by report ID, filter mergedInto === 4471, and call groupByCause with tenantOf. The hint group contains 15 reports tagged parser and 18 tagged hint. Counting intake tags would incorrectly give 41 instead of 33. Together with #1's 374 parser reports and #3's five one-day reports this accounts for all 412 unique reports without double counting.
 
 Use the original src/lib/kb/causes.ts, locales.ts and tenant files. Build/test commands: npm ci; npm run build; npm test. See src/routes/kb/incidents/4471-split/+page.svx and rendered/kb/incidents/4471-split/index.html for the signed, computed investigation.
 

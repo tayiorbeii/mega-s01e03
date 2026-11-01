@@ -14,6 +14,6 @@
   <tbody>{#each months as month}<tr><td>{month}</td><td>{unique.filter(r => r.receivedAt.startsWith(month)).length}</td><td>{unique.filter(r => r.mergedAt?.startsWith(month)).length}</td></tr>{/each}</tbody>
 </table>
 <p>The export ends on {unique.map(r => r.receivedAt.slice(0, 10)).sort().at(-1)}. These counts describe that snapshot, not today's live desk.</p>
-<h3>One-day shifts: unresolved evidence, not a proven third cause</h3>
-<p>{anomalies.length} reports are flagged by desk notes. The current classifier files {groups.reduce((n, g) => n + (g.cause === 'parser' ? readAs(g, notes.oneDayMove) : 0), 0)} under parser. Their wording is not explained by a month/day swap; preserve and investigate them rather than silently declaring a timezone bug or a fix.</p>
+<h3>One-day shifts: a separate problem with an unconfirmed root cause</h3>
+<p>{anomalies.length} reports are flagged by desk notes. The original classifier files {groups.reduce((n, g) => n + (g.cause === 'parser' ? readAs(g, notes.oneDayMove) : 0), 0)} under parser. Their wording is not explained by a month/day swap. The corrected partition removes them from parser and tracks them in <a href="https://github.com/tayiorbeii/mega-s01e03/issues/3">ticket #3</a>; investigate without declaring a timezone cause or a fix.</p>
 <ul>{#each anomalies as report}<li><code>{report.id}</code> — {report.tenant}, {report.channel}: {report.body}</li>{/each}</ul>

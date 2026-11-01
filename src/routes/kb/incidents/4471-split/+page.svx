@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 re-triage: two causes, not one queued fix'
+title: '#4471 re-triage: three problems, not one queued fix'
 owner: tayiorbeii
 status: investigated
 reviewed: '2026-11-01'
@@ -9,6 +9,7 @@ signature: 'tayiorbeii — Pi harness'
 
 <script>
   import CauseTable from '#lib/kb/CauseTable.svelte';
+  import FindingTable from '#lib/kb/FindingTable.svelte';
   import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
   import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
   import ReportAudit from '#lib/kb/ReportAudit.svelte';
@@ -18,7 +19,7 @@ signature: 'tayiorbeii — Pi harness'
 ## What the desk should do
 
 Do not close new reports as one known date bug. The [original incident](/kb/incidents/4471)
-merged reports from two different paths. File and track each cause independently:
+merged reports from different paths and incompatible symptoms. Track each problem independently:
 
 - **Parser:** [parser ticket](https://github.com/tayiorbeii/mega-s01e03/issues/1).
   The shared parser reads month first for day-first tenants. An app/email booking for
@@ -27,15 +28,25 @@ merged reports from two different paths. File and track each cause independently
   For day-first tenants on booking-v3, the form prints MM/DD/YYYY but reads in the
   tenant's order. A person following that hint can get a swapped booking. Fix the hint/input
   agreement separately; fixing the shared parser alone does not establish that this is fixed.
+- **One-day/date-boundary shifts:** [separate investigation ticket](https://github.com/tayiorbeii/mega-s01e03/issues/3).
+  These reports do not describe month/day swaps. Their problem is independently actionable
+  even though this export does not establish a timezone or other root cause.
 
-## Computed evidence
+## Computed ticket counts
+
+<FindingTable />
+
+The partition first deduplicates report IDs, separates the five reports flagged in desk notes,
+then applies the tenant-aware classifier to the remainder. Every report belongs to one ticket.
+Intake tags are guesses based on browser locale, not the issue counts.
+
+## Why the original classifier missed the third problem
 
 <CauseTable ticket={4471} />
 
-These are the export's cause assignments, not independent proof that every report has the same
-root cause. The table computes the counts from unique report IDs, channel and the tenant
-registry using causes.ts and locales.ts. Intake tags are guesses based on browser
-locale; their totals are not the issue counts. Never count the overlapping export rows twice.
+This original table is a baseline, not the corrected ticket partition above. It puts the five
+one-day reports under parser because causes.ts looks only at channel and tenant settings,
+not report bodies. Its two groups do not prove there are only two problems.
 
 <ReportAudit />
 
@@ -59,8 +70,9 @@ rule to keep following. Its accepted status does not make its stale text correct
 The same subject can hide different causes; different subjects or channels can share one.
 Use tenant locale, form version, channel and the report body. Unknown tenants and unexplained
 symptoms stay separate pending investigation. Read the body's contradictions even when the
-current classifier assigns a cause. The five one-day reports remain included in parser's
-computed count, explicitly flagged, not double-counted into an invented third cause.
+current classifier assigns a cause. The five one-day reports have their own ticket and are
+removed from the parser ticket's count. A separate problem does not require pretending
+we know its root cause. No report is counted twice.
 
 ## Verification and limits
 
