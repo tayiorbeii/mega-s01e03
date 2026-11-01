@@ -17,6 +17,10 @@ Course challenge investigation of the fictional support desk's #4471 export.
 
 The course reports #4471 closed on 2026-10-05: parser fixed (“fix(dates): parse dd/mm for eu locales”), hint won't fix (“booking-v3 form retired”). Close #1 as completed and #2 as not planned; these are different outcomes. The five-report timing investigation remains open because the update gives it no verified disposition. Source and observation date are recorded in src/lib/data/engineering-4471.json and rendered on the investigation page. These are course-reported outcomes, not production tests run by this harness.
 
+## Reusable workflow
+
+Before creating, editing or closing tickets, follow the [GitHub ticket workflow](docs/github-ticket-workflow.md). It covers approval, source-backed drafts and counts, CLI commands, live-state checks, closure reasons and verification. It runs nothing automatically.
+
 ## Reproduce
 
 Requires Node.js 24 and npm.
