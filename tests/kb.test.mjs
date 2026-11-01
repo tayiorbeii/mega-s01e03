@@ -36,18 +36,20 @@ test('five anomalous reports remain visible within the parser assignment', () =>
   assert.equal(groups.find(g => g.cause === 'parser').reports.filter(r => ids.includes(r.id)).length, 5);
 });
 
-test('body evidence splits five one-day reports out of the coarse parser assignment', () => {
+test('ticket counts preserve the exported desk view with an explicit five-report overlap', () => {
   const ids = JSON.parse(read('src/lib/data/desk-notes.json')).oneDayMove;
   const findings = groupFindings(reports, tenantOf, ids);
-  assert.deepEqual(findings.map(g => [g.cause, g.reports.length]), [['parser', 374], ['hint', 33], ['one-day', 5]]);
+  assert.deepEqual(findings.map(g => [g.cause, g.reports.length]), [['parser', 379], ['hint', 33], ['one-day', 5]]);
   assert.equal(new Set(findings.flatMap(g => g.reports.map(r => r.id))).size, 412);
-  assert.equal(findings.reduce((n, g) => n + g.reports.length, 0), 412);
+  assert.equal(findings.reduce((n, g) => n + g.reports.length, 0), 417);
+  const parserIds = new Set(findings.find(g => g.cause === 'parser').reports.map(r => r.id));
+  assert.ok(ids.every(id => parserIds.has(id)));
   assert.deepEqual(findings.find(g => g.cause === 'one-day').reports.map(r => r.id).sort(), [...ids].sort());
 });
 
 test('rendered page executes the components and derives its signature stamp', () => {
   const html = read('rendered/kb/incidents/4471-split/index.html');
-  for (const text of ['374', '33', '427', '412', '15', 'issues/3', deskRef('tayiorbeii — Pi harness'), 'R-41202', 'R-41620', '2026-10-04']) assert.ok(html.includes(text), text);
+  for (const text of ['379', '33', '427', '412', '15', 'ticket counts overlap', 'issues/3', deskRef('tayiorbeii — Pi harness'), 'R-41202', 'R-41620', '2026-10-04']) assert.ok(html.includes(text), text);
   assert.ok(html.includes('<svg'));
   assert.ok(html.includes('same subject, same tenant, different channel'));
   assert.ok(!html.includes('no desk ref:'));

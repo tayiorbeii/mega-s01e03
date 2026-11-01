@@ -4,14 +4,14 @@ Course challenge investigation of the fictional support desk's #4471 export.
 
 ## Deliverables
 
-- [Parser issue](https://github.com/tayiorbeii/mega-s01e03/issues/1): 374 reports after separating the one-day symptoms.
+- [Parser issue](https://github.com/tayiorbeii/mega-s01e03/issues/1): 379 reports in the exported desk view, including the five one-day reports.
 - [Form-hint issue](https://github.com/tayiorbeii/mega-s01e03/issues/2): 33 reports.
 - [One-day/date-boundary issue](https://github.com/tayiorbeii/mega-s01e03/issues/3): 5 reports; root cause unconfirmed.
 - [Signed investigation source](src/routes/kb/incidents/4471-split/+page.svx).
 - [Rendered investigation HTML](rendered/kb/incidents/4471-split/index.html).
 - [Replacement decision](src/routes/kb/decisions/0002-dedupe-by-cause/+page.svx); accepted decision 0001 is preserved byte for byte.
 
-427 export rows → 412 unique report IDs → 374 parser + 33 hint + 5 one-day reports. Body evidence and desk-note IDs separate the third problem before applying the tenant-aware classifier to the remainder. The original classifier's 379/33 grouping is displayed only as a baseline: it does not inspect bodies and hides the five one-day symptoms. Those symptoms need their own ticket even while their root cause is uncertain. No report is counted twice.
+427 export rows → 412 unique report IDs. The desk counts 379 parser and 33 hint reports. Its five one-day reports are a subset of parser, also requiring a separate investigation ticket. Preserve that overlap: 379 + 33 + 5 are ticket-view counts, not 417 unique reports. Deduplicate IDs for the overall total. The supplied classifier does not inspect bodies; the symptom list does not establish a root cause.
 
 ## Reproduce
 

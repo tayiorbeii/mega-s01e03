@@ -36,17 +36,19 @@ merged reports from different paths and incompatible symptoms. Track each proble
 
 <FindingTable />
 
-The partition first deduplicates report IDs, separates the five reports flagged in desk notes,
-then applies the tenant-aware classifier to the remainder. Every report belongs to one ticket.
+Counts preserve the desk view as exported: deduplicate by report ID, then use the tenant-aware
+classifier for parser and hint. The five reports flagged in desk notes also get their own
+investigation ticket, but remain included under parser in the exported count. These are
+overlapping views, not a partition: adding ticket counts does not give the unique-report total.
 Intake tags are guesses based on browser locale, not the issue counts.
 
-## Why the original classifier missed the third problem
+## The desk view, as exported
 
 <CauseTable ticket={4471} />
 
-This original table is a baseline, not the corrected ticket partition above. It puts the five
-one-day reports under parser because causes.ts looks only at channel and tenant settings,
-not report bodies. Its two groups do not prove there are only two problems.
+This table supplies the desk's cause counts, including the five one-day reports filed under
+parser. causes.ts looks only at channel and tenant settings, not report bodies. Its two
+groups do not remove the need to investigate the separate timing symptoms.
 
 <ReportAudit />
 
@@ -70,9 +72,10 @@ rule to keep following. Its accepted status does not make its stale text correct
 The same subject can hide different causes; different subjects or channels can share one.
 Use tenant locale, form version, channel and the report body. Unknown tenants and unexplained
 symptoms stay separate pending investigation. Read the body's contradictions even when the
-current classifier assigns a cause. The five one-day reports have their own ticket and are
-removed from the parser ticket's count. A separate problem does not require pretending
-we know its root cause. No report is counted twice.
+current classifier assigns a cause. The five one-day reports have their own investigation
+ticket while remaining included in the parser count as exported. State that overlap rather
+than changing the desk's counts. A separate problem does not require pretending we know
+its root cause. Deduplicate IDs when reporting the overall number of reports.
 
 ## Verification and limits
 
