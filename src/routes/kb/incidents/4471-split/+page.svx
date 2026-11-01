@@ -1,0 +1,73 @@
+---
+layout: runbook
+title: '#4471 re-triage: two causes, not one queued fix'
+owner: tayiorbeii
+status: investigated
+reviewed: '2026-11-01'
+signature: 'tayiorbeii — Pi harness'
+---
+
+<script>
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import ReportAudit from '#lib/kb/ReportAudit.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+## What the desk should do
+
+Do not close new reports as one known date bug. The [original incident](/kb/incidents/4471)
+merged reports from two different paths. File and track each cause independently:
+
+- **Parser:** [parser ticket](https://github.com/tayiorbeii/mega-s01e03/issues/1).
+  The shared parser reads month first for day-first tenants. An app/email booking for
+  7 April can become 4 July. Look up the tenant's locale; browser locale is not authoritative.
+- **Hint:** [booking-v3 hint ticket](https://github.com/tayiorbeii/mega-s01e03/issues/2).
+  For day-first tenants on booking-v3, the form prints MM/DD/YYYY but reads in the
+  tenant's order. A person following that hint can get a swapped booking. Fix the hint/input
+  agreement separately; fixing the shared parser alone does not establish that this is fixed.
+
+## Computed evidence
+
+<CauseTable ticket={4471} />
+
+These are the export's cause assignments, not independent proof that every report has the same
+root cause. The table computes the counts from unique report IDs, channel and the tenant
+registry using causes.ts and locales.ts. Intake tags are guesses based on browser
+locale; their totals are not the issue counts. Never count the overlapping export rows twice.
+
+<ReportAudit />
+
+## The queue did not stop when the desk merged it
+
+<QueueTimeline ticket={4471} />
+
+Reports arrived from April onward, but merging began in July. Received dates measure when
+people reported trouble; merged dates measure desk processing. The July merge burst is not
+proof of a July onset or a sudden spike in new failures. Reports continue through October;
+known status does not establish a shipped fix. Refresh the export before claiming live counts.
+
+## Replace subject-only triage
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) is historical evidence, not a safe
+rule to keep following. Its accepted status does not make its stale text correct.
+[Decision 0002](/kb/decisions/0002-dedupe-by-cause) replaces it without changing that record.
+
+<DedupeExplorer />
+
+The same subject can hide different causes; different subjects or channels can share one.
+Use tenant locale, form version, channel and the report body. Unknown tenants and unexplained
+symptoms stay separate pending investigation. Read the body's contradictions even when the
+current classifier assigns a cause. The five one-day reports remain included in parser's
+computed count, explicitly flagged, not double-counted into an invented third cause.
+
+## Verification and limits
+
+This page is rendered from the actual .svx and supplied Svelte components; its tables, chart,
+examples and desk ref are computed, not copied from the old prose. The source export contains
+no production fix or current desk connection. Issues document problems and acceptance tests;
+none claims a fix has shipped. The rendered HTML is a static snapshot: use the source app for
+interactive triage and rebuild after data changes.
+
+<RenderStamp {signature} />

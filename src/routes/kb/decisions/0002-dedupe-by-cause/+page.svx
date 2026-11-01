@@ -1,0 +1,42 @@
+---
+layout: runbook
+title: '0002 · Merge by supported cause, not subject'
+owner: tayiorbeii
+status: accepted
+reviewed: '2026-11-01'
+signature: 'tayiorbeii — Pi harness'
+---
+
+<script>
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+**Supersedes:** [0001](/kb/decisions/0001-dedupe-by-subject), preserved unchanged.
+
+## Context
+
+The [re-triage of #4471](/kb/incidents/4471-split) found separate parser and form-hint
+paths beneath the same date symptoms. Browser-based intake guesses and matching subjects
+are not sufficient evidence that two reports share one problem.
+
+## Decision
+
+1. Deduplicate export rows by report ID before counting.
+2. Read the body and look up the tenant's locale and booking-form version.
+3. Use channel plus tenant configuration to evaluate the supported cause; browser locale
+   and intake tags are clues, not the source of truth.
+4. Merge only reports supported by the same cause; different causes get independent tickets.
+5. Unknown tenants, no matching cause, or contradictory symptoms require investigation.
+   Keep their evidence visible and do not claim certainty from a classifier alone.
+6. Refresh data as the desk works; distinguish report arrival from later merge activity.
+
+## Examples and consequences
+
+<DedupeExplorer />
+
+Same subject does not imply same cause; different subject does not imply different cause.
+Tenant lookup and body reading cost time, but avoid hiding independent fixes in one ticket.
+The computed model is a triage aid, not a replacement for investigating one-day shifts.
+
+<RenderStamp {signature} />
