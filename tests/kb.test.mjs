@@ -49,7 +49,7 @@ test('ticket counts preserve the exported desk view with an explicit five-report
 
 test('rendered page executes the components and derives its signature stamp', () => {
   const html = read('rendered/kb/incidents/4471-split/index.html');
-  for (const text of ['379', '33', '427', '412', '15', 'ticket counts overlap', 'issues/3', deskRef('tayiorbeii — Pi harness'), 'R-41202', 'R-41620', '2026-10-04']) assert.ok(html.includes(text), text);
+  for (const text of ['379', '33', '427', '412', '15', 'ticket counts overlap', 'issues/3', deskRef(read('src/routes/kb/incidents/4471-split/+page.svx').match(/^signature: '([^']+)'$/m)[1]), 'R-41202', 'R-41620', '2026-10-04']) assert.ok(html.includes(text), text);
   assert.ok(html.includes('<svg'));
   assert.ok(html.includes('same subject, same tenant, different channel'));
   assert.ok(!html.includes('no desk ref:'));

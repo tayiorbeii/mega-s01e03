@@ -4,7 +4,7 @@ title: '#4471 re-triage: three problems, not one queued fix'
 owner: tayiorbeii
 status: updated
 reviewed: '2026-11-01'
-signature: 'tayiorbeii — Pi harness'
+signature: 'v1.eyJzdWIiOiI1NDQ2IiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTM1NzQ1MjYsImV4cCI6MTc5MzY2MDkyNn0.X2dArnJLoT3MjTgzIZlmXC0FQBq0nzUmjMitMu2DQKU'
 ---
 
 <script>
