@@ -1,25 +1,21 @@
-## Problem and scope
+## Problem
 
-**33 unique reports** in #4471 are assigned to the booking-v3 date **hint** problem. They span three day-first tenants: alder.physio (de-DE), copper.studio (es-ES), pale.harbour (pt-PT), received 2026-04-17 through 2026-09-22.
+**33 unique reports** concern the booking-v3 date-field hint. It displays MM/DD/YYYY to day-first tenants while the form reads their tenant's day/month order. The displayed instruction and the input reader disagree.
 
-booking-v3 prints MM/DD/YYYY, but its form reads dates in the tenant's day-first order. Following the printed hint can therefore swap the intended month and day. This requires its own fix, separate from the shared parser (#1).
+## Evidence
 
-## Evidence and reproduction
+Affected tenants: alder.physio (de-DE), copper.studio (es-ES), pale.harbour (pt-PT), via the form channel.
 
-R-41230: copper.studio, form, reports “My client came on 1 June instead of 6 January.” Browser en-GB caused intake to guess parser, but tenant es-ES + booking-v3 + form selects hint. R-41241: alder.physio, form, reports 8 June versus 6 August, another swapped date.
+R-41230, copper.studio: “My client came on 1 June instead of 6 January.” R-41241, alder.physio: “We had two people show up on 8 June. They were booked for 6 August.”
 
-For a day-first booking-v3 tenant, follow the printed MM/DD/YYYY hint for an ambiguous date such as intended 6 January: enter 01/06/YYYY. Expected 6 January; the tenant-order reader instead interprets 1 June. This reproducer is derived from the supplied form description/classifier; the export has no running production form.
+For intended 6 January, following the displayed MM/DD/YYYY instruction produces 01/06/YYYY. A day/month reader interprets this as 1 June. This reproduction is derived from the supplied form description; the export includes no running production form.
 
-## Count and distinction
+## Count
 
-Deduplicate by report ID, filter mergedInto === 4471, and call groupByCause with tenantOf. The hint group contains 15 reports tagged parser and 18 tagged hint. Counting intake tags would incorrectly give 41 instead of 33. Together with #1's 374 parser reports and #3's five one-day reports this accounts for all 412 unique reports without double counting.
+The hint group in groupFindings contains 33 distinct report IDs. The group uses tenant locale, booking-v3 and the form channel; browser settings are not authoritative. Repeated export rows are removed by ID. Source: src/lib/kb/findings.ts and src/lib/data/reports-4471.json. Snapshot received range: 2026-04-17 through 2026-09-22.
 
-Use the original src/lib/kb/causes.ts, locales.ts and tenant files. Build/test commands: npm ci; npm run build; npm test. See src/routes/kb/incidents/4471-split/+page.svx and rendered/kb/incidents/4471-split/index.html for the signed, computed investigation.
+## Remedy and acceptance
 
-## Proposed bounded remedy and acceptance checks
+Make the displayed hint and actual form reader agree with the tenant's date order, preferably through an unambiguous date control. For each affected tenant, assert the displayed format and saved date for intended 6 January versus 1 June. Include booking-v2 and month-first controls.
 
-- Make the printed hint and actual form reader agree for the tenant's locale, preferably using an unambiguous date control.
-- Check intended 6 January versus 1 June for each affected tenant; assert both the displayed format and saved date.
-- Keep a booking-v2 day-first control and a month-first control. Check the parser path independently (#1).
-
-Status: open; fix not verified. These are export assignments, not proof of a shipped fix. The desk continues working; refresh the snapshot before claiming live counts.
+Status: open; no fix verified. Refresh the export before treating this count as live. Investigation: src/routes/kb/incidents/4471-split/+page.svx. Rendered page: rendered/kb/incidents/4471-split/index.html. Reproduce the evidence with npm ci, npm run build, npm test.
