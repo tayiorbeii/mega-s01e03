@@ -57,6 +57,16 @@ test('rendered page executes the components and derives its signature stamp', ()
   assert.ok(!html.includes('{signature}'));
 });
 
+test('engineering closure distinguishes fixed from retired without claiming a production test', () => {
+  const update = JSON.parse(read('src/lib/data/engineering-4471.json'));
+  assert.equal(update.closedOn, '2026-10-05');
+  assert.deepEqual(update.outcomes.map(o => [o.cause, o.status]), [['parser', 'fixed'], ['hint', "won't fix"]]);
+  const html = read('rendered/kb/incidents/4471-split/index.html');
+  assert.ok(html.includes('booking-v3 form retired'));
+  assert.ok(html.includes('fix(dates): parse dd/mm for eu locales'));
+  assert.ok(html.includes('remains open'));
+});
+
 test('accepted decision 0001 matches the original export', () => {
   const hash = createHash('sha256').update(read('src/routes/kb/decisions/0001-dedupe-by-subject/+page.svx')).digest('hex');
   assert.equal(hash, '41ac5460f198519b61b72c1a344a89fc3f9c26eda481ad85d710fa23f336a1c9');

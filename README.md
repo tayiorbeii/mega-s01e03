@@ -13,6 +13,10 @@ Course challenge investigation of the fictional support desk's #4471 export.
 
 427 export rows → 412 unique report IDs. The desk counts 379 parser and 33 hint reports. Its five one-day reports are a subset of parser, also requiring a separate investigation ticket. Preserve that overlap: 379 + 33 + 5 are ticket-view counts, not 417 unique reports. Deduplicate IDs for the overall total. The supplied classifier does not inspect bodies; the symptom list does not establish a root cause.
 
+## Subsequent engineering update
+
+The course reports #4471 closed on 2026-10-05: parser fixed (“fix(dates): parse dd/mm for eu locales”), hint won't fix (“booking-v3 form retired”). Close #1 as completed and #2 as not planned; these are different outcomes. The five-report timing investigation remains open because the update gives it no verified disposition. Source and observation date are recorded in src/lib/data/engineering-4471.json and rendered on the investigation page. These are course-reported outcomes, not production tests run by this harness.
+
 ## Reproduce
 
 Requires Node.js 24 and npm.

@@ -18,4 +18,4 @@ The hint group in groupFindings contains 33 distinct report IDs. The group uses 
 
 Make the displayed hint and actual form reader agree with the tenant's date order, preferably through an unambiguous date control. For each affected tenant, assert the displayed format and saved date for intended 6 January versus 1 June. Include booking-v2 and month-first controls.
 
-Status: open; no fix verified. Refresh the export before treating this count as live. Investigation: src/routes/kb/incidents/4471-split/+page.svx. Rendered page: rendered/kb/incidents/4471-split/index.html. Reproduce the evidence with npm ci, npm run build, npm test.
+Status: not planned. The course engineering update for #4471, closed 2026-10-05, says WON'T FIX: “booking-v3 form retired”. Source: https://hq.mega.dev/challenges/what-it-shows (observed 2026-11-01). Retirement is not a code fix; do not mark this completed. Refresh the export before treating this count as live. Investigation: src/routes/kb/incidents/4471-split/+page.svx. Rendered page: rendered/kb/incidents/4471-split/index.html. Reproduce the evidence with npm ci, npm run build, npm test.
